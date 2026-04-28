@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m pytest --version)",
+      "Bash(python -m pip install pytest)",
+      "Bash(python -m pip install confluent-kafka psycopg2-binary)",
+      "Bash(python -m pytest -q)",
+      "Bash(python -m pytest -v)",
+      "Bash(python -m pip install python-dotenv)",
+      "Bash(python *)",
+      "Bash(cmd.exe *)",
+      "Bash(docker rmi identity-pipeline:latest *)"
+    ]
+  }
+}
