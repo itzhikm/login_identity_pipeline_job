@@ -46,6 +46,20 @@ def test_run_backfill_does_not_commit_offsets():
     fake_consumer.close.assert_called_once()
 
 
+def test_run_incremental_skips_commit_when_no_events_consumed():
+    fake_consumer = MagicMock()
+
+    with patch.object(main, "make_consumer", return_value=fake_consumer), \
+         patch.object(main, "consume_events", return_value=[]), \
+         patch.object(main, "insert_login_events"), \
+         patch.object(main, "insert_identity_link_history", return_value=0), \
+         patch.object(main, "insert_identity_link", return_value=0):
+        main.run("2026-04-28")
+
+    fake_consumer.commit.assert_not_called()
+    fake_consumer.close.assert_called_once()
+
+
 def test_run_does_not_commit_when_db_write_fails():
     fake_consumer = MagicMock()
 

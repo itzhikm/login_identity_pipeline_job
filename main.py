@@ -3,15 +3,13 @@ import logging
 
 from dotenv import load_dotenv
 
-from src.correlator import find_correlated_pairs
 from src.db import (
     insert_identity_link,
     insert_identity_link_history,
     insert_login_events,
-    upsert_identity_links,
 )
 from src.kafka_consumer import consume_events, make_consumer
-from src.union_find import build_groups
+
 
 load_dotenv()
 
@@ -41,7 +39,7 @@ def run(date, backfill=False):
         affected = insert_identity_link(date)
         logger.info("Step 2c done: %d rows merged", affected)
 
-        if not backfill:
+        if not backfill and events:
             consumer.commit(asynchronous=False)
             logger.info("Kafka offsets committed")
     finally:
